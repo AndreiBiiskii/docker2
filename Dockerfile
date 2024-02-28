@@ -1,17 +1,15 @@
-FROM python:3.9
+FROM python:3.10-alpine
+RUN apk add --no-cache gcc musl-dev linux-headers
+ENV PYTHONUNBUFFERED 1
 
-WORKDIR /home/andrei/Desktop/new/test_reg
+WORKDIR .
 
+COPY ./requirements.txt .
+RUN pip3 install --no-cache-dir --upgrade -r requirements.txt
 
-ENV MY_ENV=netology_06_03
-
+ENV MY_ENV=stocks_products
 
 COPY . .
-
-RUN pip3 install --upgrade -r requirements.txt
-
 RUN python manage.py migrate
-
-EXPOSE 7777
-
-CMD ["python3", "manage.py", "runserver", "0.0.0.0:7474"]
+EXPOSE 6060
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:6060"]
